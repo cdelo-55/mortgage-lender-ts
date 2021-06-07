@@ -9,6 +9,7 @@
     "test": "jest"
   },
   "jest": {
+    "globals":{"ts-jest":{"tsConfig": "tests/tsconfig.json"}},
     "transform": {
       ".(ts|tsx)": "ts-jest"
     },
@@ -27,7 +28,8 @@
     "typescript": "^4.2.3"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.22",
+    "@types/jest": "^26.0.23",
+    "@types/mocha": "^8.2.2",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.4"
   }
