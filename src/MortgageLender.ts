@@ -4,26 +4,24 @@ import {LoanStatus} from "./LoanStatus";
 
 export default class MortgageLender {
     availableFunds:number = 0;
-    private _addFunds: number = 0;
+    //private _addAmt: number = 0;
     isQualified: boolean = false;
     pendingFunds: number = 0;
      
     constructor() {
-
     }
 
-    get addAmt() {
-        console.log(this._addFunds);
-        return this._addFunds;
-    }
-
-    set addAmt(depositAmt: number){
-        this._addFunds = depositAmt;
-    }
-            
-    addFunds(_addFunds: number): number {
-      console.log(this._addFunds);  
-      this.availableFunds += this._addFunds;
+    // set addAmt(value: number){
+    //    this._addAmt = value;
+    // }
+    // get addAmt() {
+    //   console.log(this._addAmt);
+    //   return this._addAmt;
+    // }
+           
+    addFunds(amt: number): number {
+      //console.log(this._addAmt);  
+      this.availableFunds += amt;
       return this.availableFunds;
     }
     
@@ -44,29 +42,42 @@ export default class MortgageLender {
     // credit score above 620 and savings worth 25% of requested loan amount.
 
   reviewApplication(pendingApp:LoanApplication): boolean {
+     
     if (pendingApp.dti < 36 && pendingApp.creditScore > 620 && 
-        pendingApp.savings >= pendingApp.loanAmount * .25 ) {
-        this.isQualified = true;
+        pendingApp.savings >= pendingApp.loanAmount * 0.25 ) {
+        pendingApp.isQualified = true; // changed this
     } else {
-      this.isQualified = false;
+      pendingApp.isQualified = false; // changed this
     }
-    return this.isQualified;
+    return pendingApp.isQualified; // changed
   }
 
-  sendOffer(pendingApp:LoanApplication): void {
-     if (pendingApp.approve) {
-       this.pendingFunds += pendingApp.loanAmount;
-       this.availableFunds -= pendingApp.loanAmount;
-       pendingApp.loanStatus = LoanStatus.Pending;
-     }
-  }
+  // sendOffer(pendingApp:LoanApplication): void {
+  //   if (pendingApp.approve) {
+  //     this.pendingFunds += pendingApp.loanAmount;
+  //     this.availableFunds -= pendingApp.loanAmount;
+  //     pendingApp.loanStatus = LoanStatus.Pending;
+  //   }
+  // }
 
+  sendOffer(loanApp:LoanApplication): void {
+    loanApp.loanStatus = LoanStatus.Pending;
+    this.pendingFunds += loanApp.loanAmount;
+    this.availableFunds -= loanApp.loanAmount;
+  }
   
   // Release Offer - receive response for loan offers, so that I can update the status of pending loans.
-  releaseOffer(pendingApp:LoanApplication): void {
-    // if (pendingApp.loanStatus === "Accepted") {
-    //     this.
-    // }
+  releaseOffer(loanApp:LoanApplication): void {
+   
+    if (loanApp.loanStatus === LoanStatus.Accepted) {
+      this.pendingFunds -= loanApp.loanAmount;
+    } else { 
+      if (loanApp.loanStatus === LoanStatus.Rejected) {
+      this.pendingFunds -= loanApp.loanAmount; 
+      this.availableFunds += loanApp.loanAmount;
+      } 
+    }
+     
   }
-};
+}
 

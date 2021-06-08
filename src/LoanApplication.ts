@@ -19,16 +19,7 @@ export default class LoanApplication  {
         this.dti = dti;
         this.creditScore = creditScore;
     } 
-   
-    // get loanAmount() {
-    //     console.log(this._loanAmount);
-    //     return this._loanAmount;
-    // }
-
-    // set loanAmount(loanAmount: number){
-    //     this._loanAmount = loanAmount;
-    // }        
-    
+     
     isApproved(): boolean {
         return this.approve;
     }
